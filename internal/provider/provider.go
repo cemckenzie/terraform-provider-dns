@@ -577,6 +577,9 @@ func resourceDnsRead(d *schema.ResourceData, meta interface{}, rrType uint16) ([
 		msg := new(dns.Msg)
 		msg.SetQuestion(fqdn, rrType)
 
+		fmt.Println("EXCHANGING DNS MESSAGE:")
+		fmt.Println(msg)
+
 		r, err := exchange(msg, true, meta)
 		if err != nil {
 			return nil, fmt.Errorf("Error querying DNS record: %s", err)
@@ -597,6 +600,10 @@ func resourceDnsRead(d *schema.ResourceData, meta interface{}, rrType uint16) ([
 		if rrType == dns.TypeNS {
 			return r.Ns, nil
 		}
+
+		fmt.Println("RECEIVED RESPONSE:")
+		fmt.Println(r)
+
 		return r.Answer, nil
 	} else {
 		return nil, fmt.Errorf("update server is not set")
